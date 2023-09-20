@@ -19,6 +19,16 @@
 */Demo/
 */Demo.meta
 
+Assets/**/Examples/
+Assets/**/Examples
+Assets/**/Examples.meta
+
+**/Examples/
+**/Example/
+**/Demo/
+**/Test/
+**/Trash/
+
 
 #Unity+VS
 */Library/
