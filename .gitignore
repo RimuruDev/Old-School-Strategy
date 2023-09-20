@@ -19,6 +19,7 @@
 */Demo/
 */Demo.meta
 
+
 #Unity+VS
 */Library/
 */[Ll]ibrary/
@@ -847,5 +848,5 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/git,unity,macos,csharp,windows,visualstudio,visualstudiocode
 @RimuruDev
-OldSchoolStrategy/Assets/QuickOutline/Samples.meta
-OldSchoolStrategy/Assets/QuickOutline/Samples
+OldSchoolStrategy/Assets/External/QuickOutline/Samples.meta
+OldSchoolStrategy/Assets/External/QuickOutline/Samples/
