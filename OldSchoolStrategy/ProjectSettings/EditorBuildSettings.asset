@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Internal/Scenes/Gameplay.unity
     guid: c125d1428c5bea74d89d78952e045913
+  - enabled: 1
+    path: Assets/External/GridLogic/Examples/HexagonGrid.unity
+    guid: 5ae417c0153e2484090ae018ffea8d88
   m_configObjects: {}

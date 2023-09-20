@@ -1,18 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace PWH.Grids
+namespace RimuruDev.External.GridLogic.Grids
 {
     public static class GridUtils
     {
-        // The grid needs to be ontop of a surface with a collider as this uses raycasts
+        /// <summary>
+        /// The grid needs to be ontop of a surface with a collider as this uses raycasts
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="camera"></param>
+        /// <param name="foundValue"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T GetGridValueAtMousePos<T>(Grid<T> grid, Camera camera, out bool foundValue)
         {
             Vector2 mousePosition = Input.mousePosition;
 
             var mouseRay =
-                camera.ScreenPointToRay(new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane));
+                camera.ScreenPointToRay(new Vector3(mousePosition.x, mousePosition.y, camera.nearClipPlane));
 
             if (Physics.Raycast(mouseRay, out RaycastHit hit))
             {

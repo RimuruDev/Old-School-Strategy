@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace PWH.Utils
+namespace RimuruDev.External.GridLogic.Utils
 {
     public abstract class BasicSingleton<T> : MonoBehaviour where T : BasicSingleton<T>
     {

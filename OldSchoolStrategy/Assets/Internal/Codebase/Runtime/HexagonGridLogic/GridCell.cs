@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using UnityEngine;
+using System;
+using RimuruDev.External.GridLogic.Grids;
 
-namespace PWH.Grids.Examples
+namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
 {
-    // Since PathGridObject is abstract, we make inherit it in this script, which does nothing extra.
-
-    public class GridCell : PathGridObject<GridCell>, System.IEquatable<GridCell>
+    public sealed class GridCell : PathGridObject<GridCell>, IEquatable<GridCell>
     {
         public GridCell(Grid<GridCell> sourceGrid, int xIndex, int yIndex, float movementDifficulty)
             : base(sourceGrid, xIndex, yIndex, movementDifficulty)
@@ -16,10 +12,9 @@ namespace PWH.Grids.Examples
 
         public bool Equals(GridCell other)
         {
-            if (other == null)
-                throw new NoNullAllowedException(nameof(other));
+            other.CheckNullArgumentException();
 
-            return (xIndex == other.xIndex && yIndex == other.yIndex);
+            return xIndex == other!.xIndex && yIndex == other.yIndex;
         }
     }
 }

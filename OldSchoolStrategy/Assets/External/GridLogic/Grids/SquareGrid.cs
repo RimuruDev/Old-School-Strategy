@@ -1,17 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PWH.Grids
+namespace RimuruDev.External.GridLogic.Grids
 {
     public class SquareGrid<T> : Grid<T>
     {
-        TextMesh[,] textMeshMap;
+        private TextMesh[,] textMeshMap;
         public bool ConnectDiagonally { get; set; }
 
-        public SquareGrid(GridAxis gridAxis, Vector3 offset, int width, int height, System.Func<Grid<T>, int, int, T> createGridObjectFunc, float cellSize,bool connectDiagonally, bool showDebug = false, int debugFontSize = 40, float debugFontScale = .1f) : base(gridAxis, offset, width, height, createGridObjectFunc, cellSize)
+        public SquareGrid(GridAxis gridAxis, Vector3 offset, int width, int height, System.Func<Grid<T>, int, int, T> createGridObjectFunc, float cellSize, bool connectDiagonally, bool showDebug = false, int debugFontSize = 40, float debugFontScale = .1f) 
+            : base(gridAxis, offset, width, height, createGridObjectFunc, cellSize)
         {
             this.ConnectDiagonally = connectDiagonally;
-            if (showDebug) { ShowDebug(debugFontSize, debugFontScale); }
+            if (showDebug)
+            {
+                ShowDebug(debugFontSize, debugFontScale);
+            }
         }
 
         public override float GetCellDistance(int x1, int y1, int x2, int y2)
@@ -30,32 +34,31 @@ namespace PWH.Grids
 
         public override List<T> GetCellNeighbors(int x, int y, List<Vector2Int> directions = null)
         {
-            if(directions != null)
+            if (directions != null)
                 return base.GetCellNeighbors(x, y, directions);
 
             if (ConnectDiagonally)
             {
                 directions = new List<Vector2Int>()
                 {
-                    new Vector2Int(0,1), // UP
-                    new Vector2Int(0,-1), // DOWN
-                    new Vector2Int(1,0), // RIGHT
-                    new Vector2Int(-1,0), // LEFT
-                    new Vector2Int(1,1), // UP RIGHT
-                    new Vector2Int(-1,1), // UP LEFT
-                    new Vector2Int(1,-1), // DOWN RIGHT
-                    new Vector2Int(-1,-1), // DOWN LEFT
+                    new Vector2Int(0, 1), // UP
+                    new Vector2Int(0, -1), // DOWN
+                    new Vector2Int(1, 0), // RIGHT
+                    new Vector2Int(-1, 0), // LEFT
+                    new Vector2Int(1, 1), // UP RIGHT
+                    new Vector2Int(-1, 1), // UP LEFT
+                    new Vector2Int(1, -1), // DOWN RIGHT
+                    new Vector2Int(-1, -1), // DOWN LEFT
                 };
-                
             }
             else
             {
                 directions = new List<Vector2Int>()
                 {
-                    new Vector2Int(0,1), // UP
-                    new Vector2Int(0,-1), // DOWN
-                    new Vector2Int(1,0), // RIGHT
-                    new Vector2Int(-1,0), // LEFT
+                    new Vector2Int(0, 1), // UP
+                    new Vector2Int(0, -1), // DOWN
+                    new Vector2Int(1, 0), // RIGHT
+                    new Vector2Int(-1, 0), // LEFT
                 };
             }
 
@@ -73,7 +76,7 @@ namespace PWH.Grids
             }
         }
 
-        public void RedrawDebug(int x,int y)
+        public void RedrawDebug(int x, int y)
         {
             textMeshMap[x, y].text = Map[x, y].ToString();
         }
@@ -92,7 +95,8 @@ namespace PWH.Grids
                     GameObject valueText = new GameObject();
                     valueText.name = "DebugText (" + x + "," + y + ")";
                     valueText.transform.position = GetWorldPosition(x, y, true) + new Vector3(0, 0.1f, 0);
-                    valueText.transform.eulerAngles = Gridaxis == GridAxis.XZ ? new Vector3(90, 0, 0) : new Vector3(0, 0, 0);
+                    valueText.transform.eulerAngles =
+                        Gridaxis == GridAxis.XZ ? new Vector3(90, 0, 0) : new Vector3(0, 0, 0);
                     valueText.transform.localScale = new Vector3(debugFontScale, debugFontScale, debugFontScale);
                     TextMesh textMesh = valueText.AddComponent<TextMesh>();
                     textMesh.fontSize = fontSize;
@@ -108,7 +112,10 @@ namespace PWH.Grids
             Debug.DrawLine(GetWorldPosition(0, Height), GetWorldPosition(Width, Height), Color.black, 9999f, false);
             Debug.DrawLine(GetWorldPosition(Width, 0), GetWorldPosition(Width, Height), Color.black, 9999f, false);
 
-            GridValueChanged += (object sender, GridValueChangedEventArgs args) => { textMeshMap[args.x, args.y].text = GetValue(args.x, args.y)?.ToString(); };
+            GridValueChanged += (object sender, GridValueChangedEventArgs args) =>
+            {
+                textMeshMap[args.x, args.y].text = GetValue(args.x, args.y)?.ToString();
+            };
         }
     }
 }

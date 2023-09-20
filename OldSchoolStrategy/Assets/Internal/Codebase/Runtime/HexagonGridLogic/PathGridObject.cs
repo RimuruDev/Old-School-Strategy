@@ -1,8 +1,9 @@
-using System.Collections.Generic;
 using UnityEngine;
-using PWH.Grids.Pathfinding;
+using System.Collections.Generic;
+using RimuruDev.External.GridLogic.Grids;
+using RimuruDev.External.GridLogic.Pathfinding;
 
-namespace PWH.Grids.Examples
+namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
 {
     // GridObject that implements the pathfinding node interface, needs another class to inherit from it
     // IPathFindingNode is basically all of the infomation the pathfinder needs every cell to have in order to function
@@ -16,7 +17,8 @@ namespace PWH.Grids.Examples
         public Vector3 position { get; set; }
         public float movementDifficulty { get; set; }
 
-        public virtual bool traversable => movementDifficulty == 0 ? false : true;
+        public virtual bool traversable =>
+            movementDifficulty != 0;
 
         public float distanceTravelled { get; set; } = Mathf.Infinity;
         public float priority { get; set; }
@@ -46,32 +48,26 @@ namespace PWH.Grids.Examples
         public int CompareTo(IPathfindingNode other)
         {
             if (priority < other.priority)
-            {
                 return -1;
-            }
-            else if (this.priority > other.priority)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
+
+            return priority > other.priority ? 1 : 0;
         }
 
         public bool Equals(PathGridObject<T> other)
         {
-            return (xIndex == other.xIndex && yIndex == other.yIndex);
+            other.CheckNullArgumentException();
+
+            return xIndex == other!.xIndex && yIndex == other.yIndex;
         }
 
         public bool Equals(IPathfindingNode other)
         {
-            return (xIndex == other.xIndex && yIndex == other.yIndex);
+            other.CheckNullArgumentException();
+
+            return xIndex == other!.xIndex && yIndex == other.yIndex;
         }
 
-        public override string ToString()
-        {
-            return "M Dif: " + movementDifficulty + "\nPos: (" + xIndex + "," + yIndex + ")";
-        }
+        public override string ToString() =>
+            "M Dif: " + movementDifficulty + "\nPos: (" + xIndex + "," + yIndex + ")";
     }
 }

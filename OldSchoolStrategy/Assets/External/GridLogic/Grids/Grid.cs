@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-namespace PWH.Grids
+namespace RimuruDev.External.GridLogic.Grids
 {
     public abstract class Grid<T>
     {
@@ -20,26 +19,27 @@ namespace PWH.Grids
 
         public Grid(GridAxis gridAxis, Vector3 offset, int width, int height, System.Func<Grid<T>, int, int, T> createGridObjectFunc, float cellSize)
         {
-            this.Gridaxis = gridAxis;
-            this.WorldSpaceOffset = offset;
-            this.Width = width;
-            this.Height = height;
-            this.WorldSpaceCellSize = cellSize;
+            Gridaxis = gridAxis;
+            WorldSpaceOffset = offset;
+            Width = width;
+            Height = height;
+            WorldSpaceCellSize = cellSize;
 
             Map = new T[width, height];
 
-            for (int x = 0; x < Map.GetLength(0); x++)
+            for (var x = 0; x < Map.GetLength(0); x++)
             {
-                for (int y = 0; y < Map.GetLength(1); y++)
+                for (var y = 0; y < Map.GetLength(1); y++)
                 {
-                    T newObject = createGridObjectFunc(this, x, y);
+                    var newObject = createGridObjectFunc(this, x, y);
+                    
                     Map[x, y] = newObject;
                 }
             }
         }
 
-        public virtual float GetCellDistance(int x1, int y1, int x2, int y2)
-        { return 0f;}
+        public virtual float GetCellDistance(int x1, int y1, int x2, int y2) =>
+            0f;
 
         public virtual void SetValue(int x, int y, T value)
         {
@@ -57,7 +57,7 @@ namespace PWH.Grids
             int x, y;
             GetXY(position, out x, out y);
 
-            if(!WithinBounds(x, y))
+            if (!WithinBounds(x, y))
                 throw new System.ArgumentException($"{x}, {y} does not exist within Grid");
 
             SetValue(x, y, value);
@@ -69,15 +69,17 @@ namespace PWH.Grids
             {
                 return Map[x, y];
             }
-            else
-            {
-                throw new System.ArgumentException($"{x}, {y} does not exist within Grid");
-            }
+
+            throw new System.ArgumentException($"{x}, {y} does not exist within Grid");
         }
 
         public bool WithinBounds(int x, int y)
         {
-            if ((x < 0f || y < 0f) || (x > Map.GetLength(0) - 1 || y > Map.GetLength(1) - 1)) { return false; }
+            if ((x < 0f || y < 0f) || (x > Map.GetLength(0) - 1 || y > Map.GetLength(1) - 1))
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -134,17 +136,19 @@ namespace PWH.Grids
             if (centered)
             {
                 if (Gridaxis == GridAxis.XY)
-                    return GetWorldPosition(x, y, false) + new Vector3(WorldSpaceCellSize / 2, WorldSpaceCellSize / 2, 0);
-                else
-                    return GetWorldPosition(x, y, false) + new Vector3(WorldSpaceCellSize / 2, 0, WorldSpaceCellSize / 2);
+                    return GetWorldPosition(x, y, false) +
+                           new Vector3(WorldSpaceCellSize / 2, WorldSpaceCellSize / 2, 0);
+
+                return GetWorldPosition(x, y, false) +
+                       new Vector3(WorldSpaceCellSize / 2, 0, WorldSpaceCellSize / 2);
             }
-            else
-            {
-                if (Gridaxis == GridAxis.XY)
-                    return new Vector3(x + WorldSpaceOffset.x, y + WorldSpaceOffset.y, WorldSpaceOffset.z) * WorldSpaceCellSize;
-                else
-                    return new Vector3(x + WorldSpaceOffset.x, WorldSpaceOffset.y, y + WorldSpaceOffset.y) * WorldSpaceCellSize;
-            }
+
+            if (Gridaxis == GridAxis.XY)
+                return new Vector3(x + WorldSpaceOffset.x, y + WorldSpaceOffset.y, WorldSpaceOffset.z) *
+                       WorldSpaceCellSize;
+
+            return new Vector3(x + WorldSpaceOffset.x, WorldSpaceOffset.y, y + WorldSpaceOffset.y) *
+                   WorldSpaceCellSize;
         }
 
         public Vector3 GetWorldPosition(T cell, bool centered = false)

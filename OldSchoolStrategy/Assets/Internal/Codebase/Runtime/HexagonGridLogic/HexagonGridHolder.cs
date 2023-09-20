@@ -1,20 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using NaughtyAttributes;
+using RimuruDev.External.GridLogic.Grids;
+using RimuruDev.External.GridLogic.Pathfinding;
 using UnityEngine;
-using PWH.Grids.Pathfinding;
 
-namespace PWH.Grids.Examples
+namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
 {
-    public class HexagonGridHolder : MonoBehaviour
+    public sealed class HexagonGridHolder : MonoBehaviour
     {
         // Remember grids start at 0,0 so a width and height of 5 will result in the top right corner being 4,4 on the grid.
         public int width = 5;
         public int height = 5;
         public float cellSize = 10f;
         public bool doDebug = true;
+        public GridAxis gridAxis = GridAxis.XZ;
+        public Vector2 gridOffset = Vector2.zero;
+        public Camera cameraRenderer;
+        public Vector3Int currentTestPositionForRay;
 
-        HexagonGrid<GridCell> grid;
-        Pathfinder pathfinder;
+        private HexagonGrid<GridCell> grid;
+        private Pathfinder pathfinder;
 
         private void Start()
         {
@@ -23,7 +27,7 @@ namespace PWH.Grids.Examples
             // When Initializing a grid you need to provide it with a function that returns an instance of whatever type
             // of object the grid holds.
 
-            grid = new HexagonGrid<GridCell>(GridAxis.XZ, Vector2.zero, width, height, GenerateNewGridCell, cellSize,
+            grid = new HexagonGrid<GridCell>(gridAxis, gridOffset, width, height, GenerateNewGridCell, cellSize,
                 doDebug, 40, 0.075f);
 
             // The key feature of a Hexagon grid, is that it can generate it's own mesh
@@ -43,45 +47,41 @@ namespace PWH.Grids.Examples
             // You can convert any grid of objects that inherit from IPathfindingNode to a
             // Grid of IPathfindingNodes via the PathfindingUtils class
 
-            Grid<IPathfindingNode> graph = PathfinderUtils.ConvertGridToGraph(grid);
+            var graph = PathfinderUtils.ConvertGridToGraph(grid);
 
-            IPathfindingNode startNode = graph.GetValue(0, 0);
-            IPathfindingNode endNode = graph.GetValue(x, y);
+            var startNode = graph.GetValue(0,0); // Selected Unit
+            var endNode = graph.GetValue(x, y); // Target Position
 
-            float debugDuration = 1f;
+            var debugDuration = 1f;
 
-            List<IPathfindingNode> path = pathfinder.Init(graph, startNode, endNode, true, debugDuration);
+            var path = pathfinder.Init(graph, startNode, endNode, true, debugDuration);
 
             // The pathfinder returns the path to the goal node in order from start to goal.
             // You can reverse engineer it with graph.GetWorldPositionCentered() to move something along it
             // I recommend DoTween for this
 
-            var result = graph.GetWorldPosition(5, 5);
-            print($"Position(5:5) = {result}");
+            // var pos = graph.GetWorldPosition(5, 5);
+            // print($"pos(5:5) = {result}");
         }
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                GridCell cell = GridUtils.GetGridValueAtMousePos(grid, Camera.main, out bool foundValue);
+            if (!Input.GetMouseButtonDown(0))
+                return;
 
-                if (foundValue)
-                {
-                    grid.GetXY(cell, out int x, out int y);
+            var cell = GridUtils.GetGridValueAtMousePos(grid, cameraRenderer, out var foundValue);
 
+            if (!foundValue)
+                return;
 
-                    PathfindTo(x, y);
-                }
-            }
+            grid.GetXY(cell, out var x, out var y);
+            PathfindTo(x, y);
         }
 
-        // Randomises the cell's movement difficulty in the grid between passable (1) and impassable (0)
-        GridCell GenerateNewGridCell(Grid<GridCell> source, int x, int y)
+        private static GridCell GenerateNewGridCell(Grid<GridCell> source, int x, int y)
         {
-            // This randomisation is commented out so that the Pathfinder works on first try. To preview it simply remove
-            // the 1 and /* */
-            int movementDifficulty = Random.Range( /*0*/1, 2);
+            var movementDifficulty = Random.Range(1, 2);
+
             return new GridCell(source, x, y, movementDifficulty);
         }
     }
