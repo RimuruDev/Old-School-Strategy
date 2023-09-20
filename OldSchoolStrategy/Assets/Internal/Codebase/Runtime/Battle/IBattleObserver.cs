@@ -9,9 +9,10 @@
 //
 // **************************************************************** //
 
-namespace RimuruDev.Internal.Codebase.Runtime.UnitLogic
+namespace RimuruDev.Internal.Codebase.Runtime.Battle
 {
-    public sealed class Archer : Unit
+    public interface IBattleObserver
     {
+        
     }
 }

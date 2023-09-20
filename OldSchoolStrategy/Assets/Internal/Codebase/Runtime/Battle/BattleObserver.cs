@@ -9,10 +9,14 @@
 //
 // **************************************************************** //
 
-namespace RimuruDev.Internal.Codebase.Runtime.UnitLogic
+using System;
+
+namespace RimuruDev.Internal.Codebase.Runtime.Battle
 {
-    public sealed class Skeleton : Unit
+    public sealed class BattleObserver : IBattleObserver, IDisposable
     {
-        
+        public void Dispose()
+        {
+        }
     }
 }

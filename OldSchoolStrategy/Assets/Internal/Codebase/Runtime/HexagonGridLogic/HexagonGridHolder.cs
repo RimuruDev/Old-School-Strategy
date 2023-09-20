@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NaughtyAttributes;
 using RimuruDev.External.GridLogic.Grids;
 using RimuruDev.External.GridLogic.Pathfinding;
@@ -15,7 +16,6 @@ namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
         public GridAxis gridAxis = GridAxis.XZ;
         public Vector2 gridOffset = Vector2.zero;
         public Camera cameraRenderer;
-        public Vector3Int currentTestPositionForRay;
 
         private HexagonGrid<GridCell> grid;
         private Pathfinder pathfinder;
@@ -49,8 +49,8 @@ namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
 
             var graph = PathfinderUtils.ConvertGridToGraph(grid);
 
-            var startNode = graph.GetValue(0,0); // Selected Unit
-            var endNode = graph.GetValue(x, y); // Target Position
+            var startNode = graph.GetValue(0, 0);
+            var endNode = graph.GetValue(x, y);
 
             var debugDuration = 1f;
 
@@ -60,8 +60,10 @@ namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
             // You can reverse engineer it with graph.GetWorldPositionCentered() to move something along it
             // I recommend DoTween for this
 
-            // var pos = graph.GetWorldPosition(5, 5);
-            // print($"pos(5:5) = {result}");
+            // foreach (var node in path)
+            // {
+            //     print(node.position);
+            // }
         }
 
         private void Update()
