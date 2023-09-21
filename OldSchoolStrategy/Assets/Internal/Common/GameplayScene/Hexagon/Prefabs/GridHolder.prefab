@@ -51,6 +51,9 @@ MonoBehaviour:
   height: 11
   cellSize: 0.5
   doDebug: 1
+  gridAxis: 0
+  gridOffset: {x: 0, y: 0}
+  cameraRenderer: {fileID: 0}
 --- !u!33 &6598625739600980253
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -13,14 +13,13 @@ using UnityEngine;
 
 namespace RimuruDev.Internal.Codebase.Runtime.UnitLogic
 {
-    // TODO: Add SO <TUnitConfig>
+    // TODO: Add SO Unit<TUnitConfig> : MonoBehaviour
     [SelectionBase]
     [DisallowMultipleComponent]
-    public abstract class Unit : MonoBehaviour
+    public abstract class Unit : MonoBehaviour, IUnit
     {
-        [field: Header("Base Unit Settings")]
-        [field: SerializeField, Min(0)] public float Health { get; private set; }
-        [field: SerializeField] public Vector2Int Move { get; private set; }
-        [field: SerializeField, Min(0)] public float Initiative { get; private set; }
+        // Health, Move, Initiative
     }
+
+    public interface IUnit { }
 }

@@ -5,8 +5,6 @@ using RimuruDev.External.GridLogic.Pathfinding;
 
 namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
 {
-    // GridObject that implements the pathfinding node interface, needs another class to inherit from it
-    // IPathFindingNode is basically all of the infomation the pathfinder needs every cell to have in order to function
     public abstract class PathGridObject<T> : IPathfindingNode, System.IEquatable<PathGridObject<T>>
         where T : PathGridObject<T>, System.IEquatable<T>
     {
@@ -24,20 +22,18 @@ namespace RimuruDev.Internal.Codebase.Runtime.HexagonGridLogic
         public float priority { get; set; }
         public IPathfindingNode previous { get; set; }
 
-        public List<IPathfindingNode> neighbours =>
-            PathfinderUtils.FilterTraversable(
-                PathfinderUtils.ToIPathfindingNodes(sourceGrid.GetCellNeighbors(xIndex, yIndex)));
-
         public PathGridObject(Grid<T> sourceGrid, int xIndex, int yIndex, float movementDifficulty)
         {
             this.sourceGrid = sourceGrid;
-
-            // Pathfinding Stuff
             this.xIndex = xIndex;
             this.yIndex = yIndex;
             this.movementDifficulty = movementDifficulty;
             position = sourceGrid.GetWorldPosition(xIndex, yIndex);
         }
+
+        public List<IPathfindingNode> neighbours =>
+            PathfinderUtils.FilterTraversable(
+                PathfinderUtils.ToIPathfindingNodes(sourceGrid.GetCellNeighbors(xIndex, yIndex)));
 
         public void Reset()
         {

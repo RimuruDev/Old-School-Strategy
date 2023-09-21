@@ -11,7 +11,7 @@
 
 using System;
 
-namespace RimuruDev.Internal.Codebase.Infrastructure
+namespace RimuruDev.Internal.Codebase.Infrastructure.Services.LocalStorage
 {
     // Keep the basic information in this location.
     // Add a provider for easy access to the storage.

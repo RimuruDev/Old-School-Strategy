@@ -17,6 +17,7 @@ using RimuruDev.Internal.Codebase.Infrastructure.Services.Curtain;
 using RimuruDev.Internal.Codebase.Infrastructure.Services.Resource;
 using RimuruDev.Internal.Codebase.Infrastructure.Services.SceneLoader;
 using RimuruDev.Internal.Codebase.Infrastructure.Services.StaticData;
+using RimuruDev.Internal.Codebase.Runtime.Battle;
 using Zenject;
 
 namespace RimuruDev.Internal.Codebase.Infrastructure.Installers
@@ -36,6 +37,8 @@ namespace RimuruDev.Internal.Codebase.Infrastructure.Installers
             Container.Bind<ISceneLoaderService>().To<SceneLoaderService>().AsSingle();
             Container.Bind<IResourceLoaderService>().To<ResourceLoaderServiceService>().AsSingle();
             Container.Bind<IActionUpdaterService>().To<ActionUpdaterService>().AsSingle();
+
+            Container.Bind<IBattleObserver>().To<BattleObserver>().AsSingle();
         }
     }
 }

@@ -15,7 +15,7 @@ using UnityEngine;
 
 public static class ObjectExceptionExtension
 {
-    public static void CheckNullArgumentException(this object target)
+    public static void CheckNullArgumentException(this object target, Action catchCallback = null)
     {
         try
         {
@@ -24,7 +24,10 @@ public static class ObjectExceptionExtension
         }
         catch (ArgumentNullException ex)
         {
-            Debug.LogError(ex.StackTrace);
+            if (catchCallback == null)
+                Debug.LogError(ex.StackTrace);
+            else
+                catchCallback.Invoke();
         }
     }
 }
